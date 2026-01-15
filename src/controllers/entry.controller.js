@@ -14,7 +14,7 @@ export const createEntry = async (req, res) => {
 /* ---------------- GET ALL ENTRIES ---------------- */
 export const getAllEntries = async (req, res) => {
   try {
-    const entries = await Entry.find().sort({ date: -1 });
+    const entries = await Entry.find().sort({ createdAt: -1 });
     res.json(entries);
   } catch (error) {
     console.error("Get Entries Error:", error);
@@ -26,14 +26,8 @@ export const getAllEntries = async (req, res) => {
 export const deleteEntryById = async (req, res) => {
   try {
     const { id } = req.params;
-
-    const deletedEntry = await Entry.findByIdAndDelete(id);
-
-    if (!deletedEntry) {
-      return res.status(404).json({ message: "Entry not found" });
-    }
-
-    res.json({ message: "Entry deleted successfully", id });
+    await Entry.findByIdAndDelete(id);
+    res.json({ success: true });
   } catch (error) {
     console.error("Delete Entry Error:", error);
     res.status(500).json({ message: "Failed to delete entry" });

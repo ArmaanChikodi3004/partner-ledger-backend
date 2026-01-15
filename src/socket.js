@@ -2,14 +2,10 @@ import { Server } from "socket.io";
 
 let io;
 
-/**
- * Initialize Socket.IO with HTTP server
- */
 export function initSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: "*", // allow frontend + APK
-      methods: ["GET", "POST"],
+      origin: "*",
     },
   });
 
@@ -22,14 +18,8 @@ export function initSocket(server) {
   });
 }
 
-/**
- * Emit real-time updates to all clients
- */
 export function emitUpdate(event, data) {
-  if (!io) {
-    console.warn("⚠️ Socket.io not initialized");
-    return;
+  if (io) {
+    io.emit(event, data);
   }
-
-  io.emit(event, data);
 }

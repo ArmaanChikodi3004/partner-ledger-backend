@@ -8,6 +8,8 @@ import entryRoutes from "./routes/entries.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import { initSocket } from "./socket.js";
 
+import categoryRoutes from "./routes/categories.routes.js";
+
 dotenv.config();
 
 const app = express();
@@ -20,15 +22,16 @@ app.use(express.json());
 /* ---------------- ROUTES ---------------- */
 app.use("/api/entries", entryRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.send("Partner Ledger Backend Running");
 });
 
 /* ---------------- HTTP SERVER ---------------- */
 const server = http.createServer(app);
 
-/* ---------------- SOCKET.IO INIT ---------------- */
+/* ---------------- SOCKET INIT ---------------- */
 initSocket(server);
 
 /* ---------------- MONGODB ---------------- */
