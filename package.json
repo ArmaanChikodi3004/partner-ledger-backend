@@ -1,0 +1,30 @@
+{
+  "name": "partner-ledger-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend API for Partner Ledger (Shared Expense App)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "shared-expense",
+    "partner-ledger"
+  ],
+  "author": "Armaan S Chikodi",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.3",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
