@@ -1,41 +1,45 @@
 import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import http from "http";
 import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-import entriesRoutes from "./routes/entries.routes.js";
+import entryRoutes from "./routes/entries.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import { initSocket } from "./socket.js";
 
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-/* ---------- MIDDLEWARE ---------- */
+/* ---------------- MIDDLEWARE ---------------- */
 app.use(cors());
 app.use(express.json());
 
-/* ---------- ROUTES ---------- */
-app.use("/api/entries", entriesRoutes);
+/* ---------------- ROUTES ---------------- */
+app.use("/api/entries", entryRoutes);
+app.use("/api/auth", authRoutes);
 
-/* ---------- HEALTH CHECK ---------- */
 app.get("/", (req, res) => {
-  res.send("🚀 Shared Expense Backend is running");
+  res.send("Partner Ledger Backend Running");
 });
 
-/* ---------- DB + SERVER ---------- */
-const PORT = process.env.PORT || 5000;
+/* ---------------- HTTP SERVER ---------------- */
+const server = http.createServer(app);
 
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+/* ---------------- SOCKET.IO INIT ---------------- */
+initSocket(server);
 
+/* ---------------- MONGODB ---------------- */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected");
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running on http://localhost:${PORT}`)
-    );
+    server.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
   })
   .catch(err => {
-    console.error("❌ MongoDB connection failed:", err.message);
+    console.error("❌ MongoDB connection failed:", err);
   });
